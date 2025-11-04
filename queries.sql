@@ -54,3 +54,22 @@ ORDER BY entries.title;
 UPDATE entries
 	SET content='Back is back', date='2024-06-17', id_author=(SELECT id_author FROM authors WHERE email='alvaru@thebridgeschool.es'), category='Software'
 	WHERE title='Estamos de Lunes de Back';
+
+
+-- Actualizar la estructura de la tabla
+ALTER TABLE entries
+ADD CONSTRAINT unique_title UNIQUE (title);
+
+-- Query para que me devuelva una respuesta con los datos del autor y sin ID de la entry:
+SELECT 
+  e.title,
+  e.content,
+  e.date,
+  e.category,
+  a.name,
+  a.surname,
+  a.email,
+  a.image
+FROM entries e
+JOIN authors a
+  ON e.id_author = a.id_author;
