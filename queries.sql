@@ -72,4 +72,43 @@ SELECT
   a.image
 FROM entries e
 JOIN authors a
-  ON e.id_author = a.id_author;
+  ON e.id_author = a.id_author
+WHERE a.email = 'alejandru@thebridgeschool.es'
+
+-- Query para actualizar contenido
+UPDATE entries
+SET
+title = 'Nuevo titulo',
+content = 'Nuevo contenido',
+category = 'Muevo categoria'
+WHERE title = 'Noticia: SOL en Madrid';
+
+-- Query para borrar entradas
+DELETE FROM entries
+WHERE title = 'Nuevo titulo';
+
+--Query para autores
+SELECT *
+FROM authors
+
+-- Query para autor buscado
+SELECT *
+FROM authors
+WHERE a.email = 'alejandru@thebridgeschool.es'
+
+-- Query para crear autor
+INSERT INTO authors (name, surname, email, image)
+VALUES ('pepe', 'navarro', 'pepe@gmail.com', 'goliwis')
+
+-- Query para actualizar datos autor
+UPDATE authors
+SET
+name = 'Nuevo nombre',
+surname = 'Nuevo apellido',
+email = 'Nuevo email',
+image = 'Nueva imagen'
+WHERE email = 'pepe@gmail.com';
+
+-- Query para borrar autor
+DELETE FROM authors
+WHERE email = 'Nuevo email';

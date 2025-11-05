@@ -1,6 +1,21 @@
-// const { Pool } = require('pg');
 const queries = require('../queries/entries.queries') // Queries SQL
 const pool = require('../config/db_pgsql.js'); //datos conexion
+
+// GET
+const getAllEntries = async () => {
+    let client, result;
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(queries.getAllEntries)
+        result = data.rows
+    } catch (err) {
+        console.log(err);
+        throw err;
+    } finally {
+        client.release();
+    }
+    return result
+}
 
 // GET
 const getEntriesByEmail = async (email) => {
@@ -19,21 +34,7 @@ const getEntriesByEmail = async (email) => {
     return result
 }
 
-// GET
-const getAllEntries = async () => {
-    let client, result;
-    try {
-        client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(queries.getAllEntries)
-        result = data.rows
-    } catch (err) {
-        console.log(err);
-        throw err;
-    } finally {
-        client.release();
-    }
-    return result
-}
+
 
 // CREATE
 const createEntry = async (entry) => {
@@ -52,15 +53,56 @@ const createEntry = async (entry) => {
     return result
 }
 
-// DELETE
 //UPDATE
+const updateEntry = async (entry) => {
+  const { title, content, category, oldTitle } = entry;  
+  let client, result;
+  try {
+    client = await pool.connect();
+    const data = await client.query(queries.updateEntry, [
+      title,
+      content,
+      category,
+      oldTitle
+    ]);
+    result= data.rowCount
+  } catch (err) {
+    console.error("Error", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+  return result
+};
+
+
+// DELETE
+const deleteEntry = async (title) => {
+  let client, result;
+  try {
+    client = await pool.connect();
+
+    // Ejecuta la query con el título como parámetro
+    const data = await client.query(queries.deleteEntries, [title]);
+
+    // rowCount te dice cuántas filas se eliminaron
+    result= data.rowCount;
+  } catch (err) {
+    console.error("Error en deleteEntry (modelo):", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+  return result
+};
+
 
 const entries = {
-    getEntriesByEmail,
     getAllEntries,
+    getEntriesByEmail,
     createEntry,
-    //deleteEntry
-    //updateEntry
+    updateEntry,
+    deleteEntry
 }
 
 module.exports = entries;
@@ -68,15 +110,13 @@ module.exports = entries;
 
 // Pruebas
 
-    //  getEntriesByEmail("birja@thebridgeschool.es")
+    //  getEntriesByEmail("guillermu@thebridgeschool.es")
     // .then(data=>console.log(data)) 
 
 
 
 // getAllEntries()
 // .then(data=>console.log(data))
-
-
 
 // let newEntry = {
 //     title: "Se acabaron las mandarinas de TB",

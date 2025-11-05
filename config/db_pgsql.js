@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 require('dotenv').config()
-console.log(process.env);
+// console.log(process.env);
 
 // Datos de conexión
 const pool = new Pool({ 
