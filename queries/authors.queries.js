@@ -5,7 +5,7 @@ const queries = {
     getAuthorbyEmail:`
     SELECT *
     FROM authors
-    WHERE a.email =$1`,
+    WHERE email = $1`,
 
     createAuthor: `
     INSERT INTO authors (name, surname, email, image)
