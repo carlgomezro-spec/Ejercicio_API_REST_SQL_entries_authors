@@ -48,13 +48,44 @@ const createAuthor = async (req, res) => {
 }
 
 // PUT
+const updateAuthor= async (req, res) => {
+  try {
+    const {name, surname, email, image, oldEmail} = req.body; 
+    const result = await author.updateAuthor({name, surname, email, image, oldEmail});
+    if (result > 0) {
+    res.status(200).json({message: "Entry actualizada"});
+    }
+    else {
+      return res.status(404).json({ message: "Entry no encontrada con ese título" });
+    }
 
-// DELETE
+  } catch (error) {
+    console.error("Error al actualizar entry:", error);
+    res.status(500).json({ message: "Error interno al actualizar la entrada" });
+  }
+};
+
+// DELETE 
+const deleteAuthor = async (req, res) => {
+  try {
+    const email= req.params.email; // Params para ponerlo con / en el thunderbolt. El email se manda por params
+    const result = await author.deleteAuthor(email);
+
+    if (result > 0) {
+      res.status(200).json({ message: "Author eliminado correctamente" });
+    } else {
+      res.status(404).json({ message: "No se encontró author con ese email" });
+    }
+  } catch (error) {
+    console.error("Error al eliminar author:", error);
+    res.status(500).json({ message: "Error interno al eliminar author" });
+  }
+};
 
 module.exports = {
     getAllAuthors,
     getAuthorbyEmail,
-    createAuthor
-    // updateEntry,
-    // deleteEntry
+    createAuthor,
+    updateAuthor,
+    deleteAuthor
 }
